@@ -3,15 +3,14 @@ const asyncHandler = (requestHandler) =>{
         Promise.resolve(requestHandler(req,res,next)).catch((err)=> next(err))
     }
 }
-// const asyncHandler = (fn) => async(req,res,next) =>{
-//     try {
-//         await fn(req,res,next)
-//     } catch (error) {
-//         res.status(error.code || 500).json({
-//             success : false, 
-//             Message :error.message
-//         })
-//     }
-// }
+
+//  const asyncHandler = (fn) => async (req, res, next) => {
+//   try {
+//     await fn(req, res, next);
+//   } catch (error) {
+//     next(error); // pass error to global middleware
+//   }
+// };
+
 
 export {asyncHandler}
