@@ -75,7 +75,7 @@ const publishAVideo = asyncHandler(async (req, res) => {
   if ([title, description].some((field) => field.trim() === "")) {
     return res
       .status(400)
-      .json((message = "Title and Description are required"));
+      .json({message : "Title and Description are required"});
   }
 
   // console.log("Files received:", req.files);
