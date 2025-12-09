@@ -7,6 +7,31 @@ const getVideoComments = asyncHandler(async (req, res) => {
   //TODO: get all comments for a video
   const { videoId } = req.params;
   const { page = 1, limit = 10 } = req.query;
+
+  const pipeline = [
+    {
+      $match: {
+        video: new mongoose.Types.ObjectId(videoId),
+      },
+    },
+    {
+      $sort: { createdAt: -1 },
+    },
+  ];
+
+  const options = {
+    page: parseInt(page),
+    limit: parseInt(limit),
+  };
+
+  const comments = await Comment.aggregatePaginate(
+    Comment.aggregate(pipeline),
+    options
+  );
+
+  return res
+    .status(200)
+    .json(new ApiResponse(200, comments, "All comments fetched successfully"));
 });
 
 const addComment = asyncHandler(async (req, res) => {
