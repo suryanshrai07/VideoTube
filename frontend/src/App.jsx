@@ -1,13 +1,13 @@
 import { useState } from 'react'
-
+import Home from './components/Home'
 
 function App() {
 
 
   return (
-    <>
-   <div className=' '> Hello World !!</div>
-    </>
+    <div>
+      <Home/>
+    </div>
   )
 }
 
