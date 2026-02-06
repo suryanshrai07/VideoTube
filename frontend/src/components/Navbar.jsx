@@ -4,7 +4,7 @@ import searchIcon from "../assets/search-bar.svg";
 import signUpSvg from "../assets/sign-up.svg";
 const Navbar = () => {
   return (
-    <div className="w-full h-13 sm:h-18 border border-b-1px border-[#EAECF0] bg-black sm:px-7 px-2">
+    <div className="w-full h-13 sm:h-18  border-b border-[#EAECF0] bg-black sm:px-7 px-2">
 
       <div className="flex items-center justify-between">
 
@@ -35,7 +35,7 @@ const Navbar = () => {
       
       
         </div>
-        
+
       </div>
 
     </div>
