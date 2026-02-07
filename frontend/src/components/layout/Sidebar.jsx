@@ -6,11 +6,11 @@ export default function Sidebar() {
   const [activeItem, setActiveItem] = useState(1);
 
   return (
-    <aside className="w-70 bg-black h-full flex flex-col p-4  border-r border-[#EAECF0]">
+    <aside className="w-55 sm:w-60 md:w-70 hidden bg-black h-full sm:flex flex-col p-4  border-r border-[#EAECF0]">
       <nav className="flex flex-col gap-2 ">
         {mainNavItems.map((item) => (
           <NavItem
-            key={item.id}
+            key={item.id} 
             label={item.label}
             icon={item.icon}
             active={activeItem === item.id}
