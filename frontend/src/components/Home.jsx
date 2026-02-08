@@ -11,7 +11,7 @@ const Home = () => {
         <Navbar />
       </div>
 
-      <div className="flex-1 flex overflow-hidden min-h-0">
+      <div className="flex-1 flex  min-h-0">
         <Sidebar />
         <main className="flex-1 overflow-y-auto scroll-smooth">
           <VideoGrid videos={dummyVideos} loading={false} />

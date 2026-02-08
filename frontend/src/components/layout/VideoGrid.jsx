@@ -27,7 +27,7 @@ export default function VideoGrid({ videos, loading = true }) {
 
   // Video grid
   return (
-    <div className="w-full  px-4 py-6 md:p-6  ">
+    <div className="w-full   px-4 py-6 md:p-6  ">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 pb-8 gap-4 md:gap-6">
         {videos.map((video) => (
           <VideoCard key={video._id} video={video} />
