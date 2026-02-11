@@ -13,7 +13,7 @@ const Home = () => {
 
       <div className="flex-1 flex  min-h-0">
         <Sidebar />
-        <main className="flex-1 overflow-y-auto scroll-smooth">
+        <main className="flex-1 overflow-y-auto ">
           <VideoGrid videos={dummyVideos} loading={false} />
         </main>
       </div>
