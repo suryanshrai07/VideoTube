@@ -1,6 +1,6 @@
 
 import Icon
- from "../shared/Icon";
+ from "./icon";
 
 export default function NavItem({ label, icon, active = false, onClick }) {
   return (
