@@ -1,7 +1,7 @@
 import React from "react";
 import VideoCard from "./VideoCard";
-import VideoGridSkeleton from "../skeletons/VideoGridSkeleton";
-import videoEmptySvg from "../../assets/videos-empty.svg";
+import VideoGridSkeleton from "./skeletons/VideoGridSkeleton";
+import videoEmptySvg from "../assets/videos-empty.svg";
 
 export default function VideoGrid({ videos, loading = true }) {
   // Loading skeleton

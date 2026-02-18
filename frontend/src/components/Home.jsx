@@ -1,7 +1,7 @@
 import React from "react";
 import Navbar from "./Navbar";
-import Sidebar from "./layout/Sidebar";
-import VideoGrid from "./layout/VideoGrid";
+import Sidebar from "./Sidebar";
+import VideoGrid from "./VideoGrid";
 import { dummyVideos } from "../data/DummyVideoData";
 
 const Home = () => {

@@ -1,6 +1,6 @@
 import { useState } from "react";
-import NavItem from "../navigation/NavigationItems";
-import { mainNavItems, bottomNavItems } from "../../data/sidebarData";
+import NavItem from "./NavigationItems";
+import { mainNavItems, bottomNavItems } from "../data/sidebarData";
 
 export default function Sidebar() {
   const [activeItem, setActiveItem] = useState(1);
