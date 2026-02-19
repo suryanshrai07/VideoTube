@@ -1,8 +1,15 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import logo from "../assets/logo.svg";
+import { signupUser } from "../features/auth/authActions";
+import { useSelector, useDispatch } from "react-redux";
+import {Loader2 }from "lucide-react";
+
 
 export default function SignUp() {
+  const dispatch = useDispatch();
+  const { error, loading } = useSelector((state) => state.auth);
+
   const [formData, setFormData] = useState({
     fullName: "",
     username: "",
@@ -48,7 +55,8 @@ export default function SignUp() {
       submitData.append("coverImage", formData.coverImage);
     }
 
-    console.log("Sign up data:", formData);
+    dispatch(signupUser(submitData));
+    
   };
 
   const handleSignInClick = () => {
@@ -87,9 +95,7 @@ export default function SignUp() {
             </div>
 
             <div>
-              <label className="block text-white text-sm mb-2">
-                Username*
-              </label>
+              <label className="block text-white text-sm mb-2">Username*</label>
               <input
                 type="text"
                 name="username"
@@ -115,9 +121,7 @@ export default function SignUp() {
             </div>
 
             <div>
-              <label className="block text-white text-sm mb-2">
-                Password*
-              </label>
+              <label className="block text-white text-sm mb-2">Password*</label>
               <input
                 type="password"
                 name="password"
@@ -169,11 +173,18 @@ export default function SignUp() {
             </div>
           </div>
 
+          {error && <p style={{ color: "red" }}>{error}</p>}
           <button
             type="submit"
             className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-2.5 rounded transition-colors duration-200 cursor-pointer"
           >
-            Create Account
+            {loading ? (
+              <div className="flex justify-center items-center">
+                <Loader2 className="size-5 animate-spin" /> signing up...
+              </div>
+            ) : (
+              "Create Account"
+            )}
           </button>
         </form>
 

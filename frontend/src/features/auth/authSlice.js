@@ -1,8 +1,9 @@
 import {createSlice} from "@reduxjs/toolkit";
 
+const token  =  localStorage.getItem("token") || null;
 const initialState = {
     user : null,
-    token : localStorage.getItem("token") || null,
+    token : token,
     isAuthenticated : false,
     loading : false,
     error : null,
@@ -12,6 +13,24 @@ const authSlice = createSlice({
     name : 'auth',
     initialState,
     reducers : {
+
+        checkAuthStart(state){
+            console.log("checking authenticated user :")
+            state.loading = true;
+            state.error = null;
+        },
+        checkAuthSuccess(state,action){
+            state.loading = false;
+            state.error = null;
+            state.isAuthenticated = true;
+            state.user = action.payload.user;
+        },
+        checkAuthFailed(state){
+            state.loading = false;
+            state.error = null;
+            state.isAuthenticated = false;
+        }
+        ,
         loginStart(state){
             console.log("login start...")
             state.loading = true;
@@ -19,7 +38,7 @@ const authSlice = createSlice({
         },
 
         loginSuccess(state,action){
-            console.log("loginSucess :", action)
+            console.log("loginSuccess :", action)
             state.loading = false;
             state.isAuthenticated = true;
             state.user = action.payload.user;
@@ -43,15 +62,15 @@ const authSlice = createSlice({
             console.log("signup sucess :",action)
             state.loading = false;
             state.isAuthenticated = true;
-            state.user = action.payload.user;
-            state.token = action.payload.token;
-            localStorage.setItem("token",action.payload.token);
+            state.user = action.payload.user.data;
+            state.error = null;
         },
 
         signupFailure(state,action){
             console.log("signup failure")
             state.user = null,
             state.error = action.payload;
+            state.loading = false
         },
 
         logout(state){
@@ -70,6 +89,7 @@ const authSlice = createSlice({
 export const {
     loginStart,loginSuccess,loginFailure,
     signupStart,signupSuccess,signupFailure,
+    checkAuthStart, checkAuthFailed , checkAuthSuccess,
     logout,clearError
 } = authSlice.actions;
 

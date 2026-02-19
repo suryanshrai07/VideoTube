@@ -1,24 +1,26 @@
-import React, { useState } from "react";
+import React, { use, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useDispatch,useSelector } from "react-redux";
-import logo from "../assets/logo.svg"
+import { useDispatch, useSelector } from "react-redux";
+import { loginUser } from "../features/auth/authActions";
+import logo from "../assets/logo.svg";
 
 export default function SignIn() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const dispatch = useDispatch();
+  const { loading, error } = useSelector((state) => state.auth);
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    // Handle sign in logic here
-    console.log("Sign in:", { email, password });
+    dispatch(loginUser({ email, password }));
   };
 
   const handleSignUpClick = () => {
     navigate("/sign-up");
   };
 
-return (
+  return (
     <div className="min-h-screen bg-black flex items-center justify-center p-4">
       <div className="w-full max-w-md">
         <div className="flex flex-col items-center mb-8">
@@ -57,11 +59,12 @@ return (
             />
           </div>
 
+          {error && <p style={{ color: "red" }}>{error}</p>}
           <button
             type="submit"
             className="w-full bg-purple-600 hover:bg-purple-700 text-white font-semibold py-3 rounded transition-colors duration-200 cursor-pointer"
           >
-            Sign in With Email
+            {loading ? "Logging in..." : "Sign in With Email"}
           </button>
         </form>
 
