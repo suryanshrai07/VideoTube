@@ -3,6 +3,8 @@ import Home from "./components/Home";
 import { Routes, Route, Navigate } from "react-router-dom";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
+import VideoGrid from "./components/VideoGrid";
+import { dummyVideos } from "./data/DummyVideoData";
 import { useSelector } from "react-redux";
 import { Loader } from "lucide-react";
 import { checkAuthUser } from "./features/auth/authActions";
@@ -28,7 +30,13 @@ function App() {
   return (
     <div>
       <Routes>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Home />}>
+          <Route
+            index
+            element={<VideoGrid videos={dummyVideos} loading={false} />}
+          />
+        </Route>
+        
         <Route
           path="/sign-up"
           element={!isAuthenticated ? <SignUp /> : <Navigate to="/" />}

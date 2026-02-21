@@ -1,8 +1,7 @@
 import React from "react";
 import Navbar from "./Navbar";
 import Sidebar from "./Sidebar";
-import VideoGrid from "./VideoGrid";
-import { dummyVideos } from "../data/DummyVideoData";
+import { Outlet } from "react-router-dom";
 
 const Home = () => {
   return (
@@ -14,7 +13,7 @@ const Home = () => {
       <div className="flex-1 flex  min-h-0">
         <Sidebar />
         <main className="flex-1 overflow-y-auto ">
-          <VideoGrid videos={dummyVideos} loading={false} />
+          <Outlet />
         </main>
       </div>
     </div>
