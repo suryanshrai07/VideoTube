@@ -3,9 +3,11 @@ import logo from "../assets/logo.svg";
 import searchIcon from "../assets/search-bar.svg";
 import signUpSvg from "../assets/sign-up.svg";
 import { useNavigate } from "react-router-dom";
+import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const navigate = useNavigate();
+  const { isAuthenticated } = useSelector((state) => state.auth);
   return (
     <div className="w-full h-13 sm:h-18  border-b border-[#EAECF0] bg-black sm:px-7 px-2">
       <div className="flex items-center justify-between">
@@ -31,18 +33,22 @@ const Navbar = () => {
         </div>
 
         <div className="buttons flex items-center gap-2 sm:gap-4 ">
-          <button
-            onClick={() => navigate("/sign-in")}
-            className="text-white  font-semibold px-2  sm:px-6 py-3 hover:opacity-80 transition-opacity cursor-pointer"
-          >
-            Log in
-          </button>
-          <button
-            onClick={() => navigate("/sign-up")}
-            className="hover:opacity-90 transition-opacity cursor-pointer"
-          >
-            <img src={signUpSvg} alt="sign-up" className="h-9 sm:h-12" />
-          </button>
+          {!isAuthenticated && (
+            <>
+              <button
+                onClick={() => navigate("/sign-in")}
+                className="text-white  font-semibold px-2  sm:px-6 py-3 hover:opacity-80 transition-opacity cursor-pointer"
+              >
+                Log in
+              </button>
+              <button
+                onClick={() => navigate("/sign-up")}
+                className="hover:opacity-90 transition-opacity cursor-pointer"
+              >
+                <img src={signUpSvg} alt="sign-up" className="h-9 sm:h-12" />
+              </button>{" "}
+            </>
+          )}
         </div>
       </div>
     </div>
