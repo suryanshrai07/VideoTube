@@ -7,7 +7,7 @@ import { useSelector } from "react-redux";
 
 const Navbar = () => {
   const navigate = useNavigate();
-  const { isAuthenticated } = useSelector((state) => state.auth);
+  const { isAuthenticated, user } = useSelector((state) => state.auth);
   return (
     <div className="w-full h-13 sm:h-18  border-b border-[#EAECF0] bg-black sm:px-7 px-2">
       <div className="flex items-center justify-between">
@@ -46,7 +46,18 @@ const Navbar = () => {
                 className="hover:opacity-90 transition-opacity cursor-pointer"
               >
                 <img src={signUpSvg} alt="sign-up" className="h-9 sm:h-12" />
-              </button>{" "}
+              </button>
+            </>
+          )}
+
+          {isAuthenticated && (
+            <>
+              <img
+                src={user.avatar}
+                alt="Profile"
+                className="w-10 h-10 rounded-full object-cover border-2 border-white ring-2 ring-indigo-200 cursor-pointer"
+                onClick={()=>navigate(`/user/${user.username}`)}
+              />
             </>
           )}
         </div>

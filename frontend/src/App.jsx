@@ -9,6 +9,7 @@ import { useSelector } from "react-redux";
 import { Loader } from "lucide-react";
 import { checkAuthUser } from "./features/auth/authActions";
 import { useDispatch } from "react-redux";
+import UserProfile from "./components/UserProfile";
 
 function App() {
   const dispatch = useDispatch();
@@ -36,15 +37,23 @@ function App() {
             element={<VideoGrid videos={dummyVideos} loading={false} />}
           />
         </Route>
-        
+
         <Route
           path="/sign-up"
           element={!isAuthenticated ? <SignUp /> : <Navigate to="/" />}
         />
+
         <Route
           path="/sign-in"
           element={!isAuthenticated ? <SignIn /> : <Navigate to="/" />}
         />
+
+        <Route path="/user/:username" element={<Home/>}>
+          <Route
+            index
+            element={<UserProfile videos={dummyVideos} loading={false} />}
+          />
+        </Route>
       </Routes>
     </div>
   );
