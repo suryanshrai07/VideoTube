@@ -1,13 +1,16 @@
-import React from "react";
+import React,{useState} from "react";
 import logo from "../assets/logo.svg";
 import searchIcon from "../assets/search-bar.svg";
 import signUpSvg from "../assets/sign-up.svg";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import UploadVideo from "./UploadVideo";
 
 const Navbar = () => {
   const navigate = useNavigate();
   const { isAuthenticated, user } = useSelector((state) => state.auth);
+  const [showUpload, setShowUpload] = useState(false);
+
   return (
     <div className="w-full h-13 sm:h-18  border-b border-[#EAECF0] bg-black sm:px-7 px-2">
       <div className="flex items-center justify-between">
@@ -52,13 +55,21 @@ const Navbar = () => {
 
           {isAuthenticated && (
             <div>
-              <button className="flex items-center justify-center gap-1.5 text-white font-normal text-xs border border-white/20 bg-white/10 hover:bg-white/15 backdrop-blur-sm transition-all duration-200 px-2 py-2 rounded-full md:text-sm md:px-4 md:py-2 md:rounded-lg cursor-pointer">
+              <button
+                className="flex items-center justify-center gap-1.5 text-white font-normal text-xs border border-white/20 bg-white/10 hover:bg-white/15 backdrop-blur-sm transition-all duration-200 px-2 py-2 rounded-full md:text-sm md:px-4 md:py-2 md:rounded-lg cursor-pointer"
+                onClick={() => setShowUpload(true)}
+              >
                 <span className="text-base leading-none">+</span>
                 <span>New video</span>
               </button>
             </div>
           )}
 
+          {showUpload && (
+            <UploadVideo
+              onClose={() => setShowUpload(false)}
+            />
+          )}
           {isAuthenticated && (
             <>
               <img
