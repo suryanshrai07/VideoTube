@@ -51,12 +51,21 @@ const Navbar = () => {
           )}
 
           {isAuthenticated && (
+            <div>
+              <button className="flex items-center justify-center gap-1.5 text-white font-normal text-xs border border-white/20 bg-white/10 hover:bg-white/15 backdrop-blur-sm transition-all duration-200 px-2 py-2 rounded-full md:text-sm md:px-4 md:py-2 md:rounded-lg cursor-pointer">
+                <span className="text-base leading-none">+</span>
+                <span>New video</span>
+              </button>
+            </div>
+          )}
+
+          {isAuthenticated && (
             <>
               <img
                 src={user.avatar}
                 alt="Profile"
                 className="w-10 h-10 rounded-full object-cover border-2 border-white ring-2 ring-indigo-200 cursor-pointer"
-                onClick={()=>navigate(`/user/${user.username}`)}
+                onClick={() => navigate(`/user/${user.username}`)}
               />
             </>
           )}
