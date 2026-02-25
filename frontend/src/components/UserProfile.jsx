@@ -1,20 +1,64 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import editSvg from "../assets/editButton.svg";
+import { useParams } from "react-router-dom";
+import { axiosInstance } from "../utilities/axios";
+import { Loader } from "lucide-react";
 
 const tabs = ["Videos", "Playlist", "Tweets", "Following"];
 const filters = ["Previously uploaded", "Oldest", "Item"];
 
 export default function UserProfile({ videos }) {
-  const { user, loading } = useSelector((state) => state.auth);
+  const { username } = useParams();
+  const { user } = useSelector((state) => state.auth);
+  const [userProfile, setUserProfile] = useState(null);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    const getUserProfile = async () => {
+      try {
+        const { data } = await axiosInstance.get(`/users/c/${username}`);
+        // console.log(data.data);
+        setUserProfile(data.data);
+      } catch (error) {
+        setUserProfile(null);
+      } finally {
+        setLoading(false);
+      }
+    };
+
+    if (username) {
+      getUserProfile();
+    }
+  }, [username]);
 
   const [activeTab, setActiveTab] = useState("Videos");
   const [activeFilter, setActiveFilter] = useState("Previously uploaded");
 
-  if (loading || !user) {
+  if (loading && !userProfile) {
     return (
-      <div className="flex-1 flex items-center justify-center bg-black text-white">
-        Loading profile...
+      <div className="w-screen h-screen flex justify-center items-center">
+        <Loader className="size-10 animate-spin" />
+      </div>
+    );
+  }
+
+  if (!loading && !userProfile) {
+    return (
+      <div className="flex-1 flex flex-col items-center justify-center bg-black gap-2">
+        <p className="text-6xl font-black text-white/80 tracking-tighter">
+          404
+        </p>
+        <p className="text-lg font-semibold text-white">User not found</p>
+        <p className="text-sm text-gray-500">
+          This account doesn't exist or has been removed.
+        </p>
+        <button
+          onClick={() => window.history.back()}
+          className="mt-4 text-xs text-purple-400 hover:text-purple-300 transition-colors underline underline-offset-4 cursor-pointer"
+        >
+          Go back
+        </button>
       </div>
     );
   }
@@ -23,10 +67,10 @@ export default function UserProfile({ videos }) {
     <div className="flex-1 bg-black text-white overflow-y-auto">
       {/* coverImage */}
 
-      {user.coverImage ? (
+      {userProfile.coverImage ? (
         <div className="w-full h-36 md:h-44">
           <img
-            src={user.coverImage}
+            src={userProfile.coverImage}
             alt="CoverImage"
             className="w-full h-full object-cover"
           />
@@ -47,28 +91,31 @@ export default function UserProfile({ videos }) {
         <div className="flex items-end justify-between -mt-14">
           <div className="shrink-0">
             <img
-              src={user.avatar}
-              alt={`${user.username}`}
+              src={userProfile.avatar}
+              alt={`${userProfile.username}`}
               className="w-24 h-24 md:w-28 md:h-28 rounded-full object-cover border-4 border-black ring-2 ring-white/20"
             />
           </div>
 
           {/* Edit button stays top-right */}
-          <button className="flex items-center gap-1.5 mb-1 px-4 py-1.5 text-sm font-medium rounded-md border border-white/20 bg-white/5 hover:bg-white/10 transition-colors">
-            <img src={editSvg} />
-            Edit
-          </button>
+          {user?.username === userProfile.username && (
+            <button className="flex items-center gap-1.5 mb-1 px-4 py-1.5 text-sm font-medium rounded-md border border-white/20 bg-white/5 hover:bg-white/10 transition-colors">
+              <img src={editSvg} />
+              Edit
+            </button>
+          )}
         </div>
 
         {/* Row 2: Name & details — fully below banner */}
         <div className="mt-3 mb-4">
           <h2 className="text-xl md:text-2xl font-bold leading-tight">
-            {user.fullName}
+            {userProfile.fullName}
           </h2>
-          <p className="text-sm text-gray-400">@{user.username}</p>
+          <p className="text-sm text-gray-400">@{userProfile.username}</p>
           <p className="text-sm text-gray-400 mt-1">
-            600k Subscribers&nbsp;
-            <span className="text-gray-600">•</span>&nbsp; 220 Subscribed
+            {userProfile.subscriberCount} Subscribers&nbsp;
+            <span className="text-gray-600">•</span>&nbsp;{" "}
+            {userProfile.channelsSubscribedToCount} Subscribed
           </p>
         </div>
 

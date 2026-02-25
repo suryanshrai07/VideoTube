@@ -51,7 +51,7 @@ function App() {
         <Route path="/user/:username" element={<Home/>}>
           <Route
             index
-            element={<UserProfile videos={dummyVideos} loading={false} />}
+            element={<UserProfile videos={dummyVideos} loading={true} />}
           />
         </Route>
       </Routes>
