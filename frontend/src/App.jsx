@@ -1,15 +1,15 @@
-import { useState, useEffect } from "react";
+import { useEffect } from "react";
 import Home from "./components/Home";
 import { Routes, Route, Navigate } from "react-router-dom";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import VideoGrid from "./components/VideoGrid";
 import { dummyVideos } from "./data/DummyVideoData";
-import { useSelector,useDispatch } from "react-redux";
+import { useSelector, useDispatch } from "react-redux";
 import { Loader } from "lucide-react";
 import { checkAuthUser } from "./features/auth/authActions";
 import UserProfile from "./components/UserProfile";
-import {Toaster} from "react-hot-toast";
+import { Toaster } from "react-hot-toast";
 
 function App() {
   const dispatch = useDispatch();
@@ -32,10 +32,7 @@ function App() {
     <div>
       <Routes>
         <Route path="/" element={<Home />}>
-          <Route
-            index
-            element={<VideoGrid videos={dummyVideos} loading={false} />}
-          />
+          <Route index element={<VideoGrid />} />
         </Route>
 
         <Route
@@ -48,7 +45,7 @@ function App() {
           element={!isAuthenticated ? <SignIn /> : <Navigate to="/" />}
         />
 
-        <Route path="/user/:username" element={<Home/>}>
+        <Route path="/user/:username" element={<Home />}>
           <Route
             index
             element={<UserProfile videos={dummyVideos} loading={true} />}
@@ -56,7 +53,7 @@ function App() {
         </Route>
       </Routes>
 
-      <Toaster/>
+      <Toaster />
     </div>
   );
 }

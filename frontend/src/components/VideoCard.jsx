@@ -4,8 +4,6 @@ import {
   formatTimeAgo,
   formatDuration,
 } from "../utilities/formatter";
-import thumbnail from "../assets/thumbnail.jpg";
-import avatar from "../assets/avatar.jpg";
 import thumbnailSvg from "../assets/thumbnail-logo.svg";
 
 export default function VideoCard({ video }) {
