@@ -1,5 +1,7 @@
 import { useState, useRef } from "react";
 import { X, Upload } from "lucide-react";
+import toast from "react-hot-toast";
+import { axiosInstance } from "../utilities/axios";
 
 export default function UploadVideo({ onClose }) {
   const [videoFile, setVideoFile] = useState(null);
@@ -7,14 +9,10 @@ export default function UploadVideo({ onClose }) {
   const [title, setTitle] = useState("");
   const [description, setDescription] = useState("");
   const [dragging, setDragging] = useState(false);
-
+  const [error, setError] = useState(null);
+  const [loading, setLoading] = useState(false);
   const videoInputRef = useRef(null);
   const thumbnailInputRef = useRef(null);
-
-  const handleUpload = ({ videoFile, thumbnail, title, description }) => {
-    // call your API here
-    console.log({ videoFile, thumbnail, title, description });
-  };
 
   const handleDrop = (e) => {
     e.preventDefault();
@@ -23,12 +21,35 @@ export default function UploadVideo({ onClose }) {
     if (file && file.type.startsWith("video/")) setVideoFile(file);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     if (!videoFile || !thumbnail || !title.trim() || !description.trim()) {
-      alert("All fields are required.");
+      toast.error("All fields are required");
       return;
     }
-    onClose();
+
+    setLoading(true);
+    try {
+      const formData = new FormData();
+      formData.append("title", title);
+      formData.append("description", description);
+      formData.append("videoFile", videoFile);
+      formData.append("thumbnail", thumbnail);
+
+      const res = await axiosInstance.post("/videos", formData);
+      // console.log(res);
+      toast.success("Video Uploaded Successfully");
+
+      setVideoFile(null);
+      setDescription("");
+      setThumbnail(null);
+      setTitle("");
+    } catch (error) {
+      console.log(error);
+      setError(error.response?.data?.message);
+      toast.error("Error while uploading video");
+    } finally {
+      setLoading(false);
+    }
   };
 
   return (
@@ -151,11 +172,13 @@ export default function UploadVideo({ onClose }) {
           </div>
 
           {/* Submit */}
+          {error && <p style={{ color: "red" }}>{error}</p>}
           <button
             onClick={handleSubmit}
-            className="w-full py-3 rounded-lg bg-purple-600 hover:bg-purple-700 active:scale-[0.98] text-white text-sm font-semibold transition-all cursor-pointer"
+            disabled={loading}
+            className="w-full py-3 rounded-lg bg-purple-600 hover:bg-purple-700 active:scale-[0.98] text-white text-sm font-semibold transition-all cursor-pointer disabled:opacity-50 disabled:cursor-not-allowed"
           >
-            Upload Video
+            {loading ? "Uploading..." : "Upload Video"}
           </button>
         </div>
       </div>

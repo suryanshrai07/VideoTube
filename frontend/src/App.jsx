@@ -5,11 +5,11 @@ import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import VideoGrid from "./components/VideoGrid";
 import { dummyVideos } from "./data/DummyVideoData";
-import { useSelector } from "react-redux";
+import { useSelector,useDispatch } from "react-redux";
 import { Loader } from "lucide-react";
 import { checkAuthUser } from "./features/auth/authActions";
-import { useDispatch } from "react-redux";
 import UserProfile from "./components/UserProfile";
+import {Toaster} from "react-hot-toast";
 
 function App() {
   const dispatch = useDispatch();
@@ -55,6 +55,8 @@ function App() {
           />
         </Route>
       </Routes>
+
+      <Toaster/>
     </div>
   );
 }
