@@ -19,6 +19,7 @@ const Navbar = () => {
             src={logo}
             alt="logo"
             className="cursor-pointer w-7.75 sm:w-full"
+            onClick={()=>navigate("/")}
           />
         </div>
 
