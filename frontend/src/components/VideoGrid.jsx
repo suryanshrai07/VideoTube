@@ -13,6 +13,7 @@ export default function VideoGrid({ query = "" }) {
     (state) => state.videos,
   );
 
+  // console.log("VideoGrid - videos:", videos);
   useEffect(() => {
     dispatch(resetVideos());
     dispatch(fetchVideos(1, query));

@@ -7,6 +7,7 @@ import {
 import thumbnailSvg from "../assets/thumbnail-logo.svg";
 
 export default function VideoCard({ video }) {
+  console.log("video", video);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
 
