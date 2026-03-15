@@ -15,7 +15,7 @@ const authSlice = createSlice({
     reducers : {
 
         checkAuthStart(state){
-            console.log("checking authenticated user :")
+            // console.log("checking authenticated user :")
             state.loading = true;
             state.error = null;
         },

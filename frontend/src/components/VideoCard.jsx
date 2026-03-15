@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import {
   formatViews,
   formatTimeAgo,
@@ -7,7 +8,7 @@ import {
 import thumbnailSvg from "../assets/thumbnail-logo.svg";
 
 export default function VideoCard({ video }) {
-  console.log("video", video);
+  // console.log("video", video);
   const [imageLoaded, setImageLoaded] = useState(false);
   const [imageError, setImageError] = useState(false);
 
@@ -22,9 +23,9 @@ export default function VideoCard({ video }) {
   } = video;
 
   const { username = "Unknown", avatar } = ownerDetails;
-
+  const navigate = useNavigate();
   const handleVideoClick = () => {
-    console.log("Video clicked:", _id);
+    navigate(`/video/${_id}`, { state: { video } });
   };
 
   return (

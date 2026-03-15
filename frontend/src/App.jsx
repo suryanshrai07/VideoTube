@@ -10,6 +10,7 @@ import { Loader } from "lucide-react";
 import { checkAuthUser } from "./features/auth/authActions";
 import UserProfile from "./components/UserProfile";
 import { Toaster } from "react-hot-toast";
+import VideoPlayer from "./components/VideoPlayer";
 
 function App() {
   const dispatch = useDispatch();
@@ -51,6 +52,11 @@ function App() {
             element={<UserProfile videos={dummyVideos} loading={true} />}
           />
         </Route>
+
+        <Route path="/video/:videoId" element={<Home />}>
+          <Route index element={<VideoPlayer />} />
+        </Route>
+
       </Routes>
 
       <Toaster />
