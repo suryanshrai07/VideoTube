@@ -20,7 +20,7 @@ const getAllVideos = asyncHandler(async (req, res) => {
   let match = {};
 
   if (userId) {
-    match.owner = userId;
+    match.owner = new mongoose.Types.ObjectId(userId);
   }
 
   if (query) {
@@ -65,7 +65,9 @@ const getAllVideos = asyncHandler(async (req, res) => {
     options
   );
 
-  return res.status(200).json(new ApiResponse(true, "Videos fetched successfully", videos));
+  return res
+    .status(200)
+    .json(new ApiResponse(true, "Videos fetched successfully", videos));
 });
 
 const publishAVideo = asyncHandler(async (req, res) => {
@@ -75,7 +77,7 @@ const publishAVideo = asyncHandler(async (req, res) => {
   if ([title, description].some((field) => field.trim() === "")) {
     return res
       .status(400)
-      .json({message : "Title and Description are required"});
+      .json({ message: "Title and Description are required" });
   }
 
   // console.log("Files received:", req.files);
@@ -111,7 +113,9 @@ const publishAVideo = asyncHandler(async (req, res) => {
     owner: req.user._id,
   });
 
-  return res.status(201).json(new ApiResponse(true, "Video published successfully"));
+  return res
+    .status(201)
+    .json(new ApiResponse(true, "Video published successfully"));
 });
 
 const getVideoById = asyncHandler(async (req, res) => {
@@ -127,7 +131,9 @@ const getVideoById = asyncHandler(async (req, res) => {
     return res.status(404).json({ message: "Video not found" });
   }
 
-  return res.status(200).json(new ApiResponse(true, "Video fetched successfully", video));
+  return res
+    .status(200)
+    .json(new ApiResponse(true, "Video fetched successfully", video));
 });
 
 const updateVideo = asyncHandler(async (req, res) => {
@@ -171,7 +177,9 @@ const updateVideo = asyncHandler(async (req, res) => {
     return res.status(500).json({ message: "Error updating video" });
   }
 
-  return res.status(200).json(new ApiResponse(true, "Video updated successfully", updatedVideo));
+  return res
+    .status(200)
+    .json(new ApiResponse(true, "Video updated successfully", updatedVideo));
 });
 
 const deleteVideo = asyncHandler(async (req, res) => {
@@ -187,7 +195,9 @@ const deleteVideo = asyncHandler(async (req, res) => {
       .json({ message: "Video not found or already deleted" });
   }
 
-  return res.status(200).json(new ApiResponse(true, "Video deleted successfully"));
+  return res
+    .status(200)
+    .json(new ApiResponse(true, "Video deleted successfully"));
 });
 
 const togglePublishStatus = asyncHandler(async (req, res) => {
@@ -200,7 +210,9 @@ const togglePublishStatus = asyncHandler(async (req, res) => {
       },
     },
   ]);
-  return res.status(200).json(new ApiResponse(true, "Video publish status toggled successfully"));
+  return res
+    .status(200)
+    .json(new ApiResponse(true, "Video publish status toggled successfully"));
 });
 
 export {
