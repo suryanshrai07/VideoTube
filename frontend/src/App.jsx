@@ -4,7 +4,6 @@ import { Routes, Route, Navigate } from "react-router-dom";
 import SignIn from "./pages/SignIn";
 import SignUp from "./pages/SignUp";
 import VideoGrid from "./components/VideoGrid";
-import { dummyVideos } from "./data/DummyVideoData";
 import { useSelector, useDispatch } from "react-redux";
 import { Loader } from "lucide-react";
 import { checkAuthUser } from "./features/auth/authActions";
@@ -49,7 +48,7 @@ function App() {
         <Route path="/user/:username" element={<Home />}>
           <Route
             index
-            element={<UserProfile videos={dummyVideos} loading={true} />}
+            element={<UserProfile/>}
           />
         </Route>
 
