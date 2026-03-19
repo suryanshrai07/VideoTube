@@ -5,12 +5,12 @@ import {
     fetchVideosFailure
 } from "./videoSlice";
 
-export const fetchVideos = (page = 1,query = "") => async (dispatch) =>{
+export const fetchVideos = (page = 1,query = "",userId) => async (dispatch) =>{
     dispatch(fetchVideosStart());
 
     try {
         const res = await axiosInstance.get("/videos",{
-            params : {page, limit : 10 , query},
+            params : {page, limit : 10 , query,userId},
         });
         dispatch(
             fetchVideosSuccess({

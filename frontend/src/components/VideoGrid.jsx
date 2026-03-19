@@ -7,21 +7,21 @@ import VideoGridSkeleton from "./skeletons/VideoGridSkeleton";
 import videoEmptySvg from "../assets/videos-empty.svg";
 import useInfiniteScroll from "../hooks/useInfiniteScroll";
 
-export default function VideoGrid({ query = "" }) {
+export default function VideoGrid({ query = "",userId = null }) {
   const dispatch = useDispatch();
   const { videos, page, hasMore, loading } = useSelector(
     (state) => state.videos,
   );
-
+  
   // console.log("VideoGrid - videos:", videos);
   useEffect(() => {
     dispatch(resetVideos());
-    dispatch(fetchVideos(1, query));
-  }, [query]);
+    dispatch(fetchVideos(1, query , userId));
+  }, [query, userId]);
 
   useEffect(() => {
     if (page === 1) return;
-    dispatch(fetchVideos(page, query));
+    dispatch(fetchVideos(page, query, userId));
   }, [page]);
 
   const loadMore = useCallback(() => {

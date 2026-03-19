@@ -4,36 +4,39 @@ import editSvg from "../assets/editButton.svg";
 import { useParams } from "react-router-dom";
 import { axiosInstance } from "../utilities/axios";
 import { Loader } from "lucide-react";
+import { fetchVideos } from "../features/videos/videoActions";
+import VideoGrid from "./VideoGrid";
+import { use } from "react";
+import { act } from "react";
 
 const tabs = ["Videos", "Playlist", "Tweets", "Following"];
 const filters = ["Previously uploaded", "Oldest", "Item"];
 
-export default function UserProfile({ videos }) {
+export default function UserProfile() {
   const { username } = useParams();
   const { user } = useSelector((state) => state.auth);
   const [userProfile, setUserProfile] = useState(null);
+  const [activeTab, setActiveTab] = useState("Videos");
+  const [activeFilter, setActiveFilter] = useState("Previously uploaded");
   const [loading, setLoading] = useState(true);
 
-  useEffect(() => {
-    const getUserProfile = async () => {
-      try {
-        const { data } = await axiosInstance.get(`/users/c/${username}`);
-        // console.log(data.data);
-        setUserProfile(data.data);
-      } catch (error) {
-        setUserProfile(null);
-      } finally {
-        setLoading(false);
-      }
-    };
+  const getUserProfile = async () => {
+    try {
+      const { data } = await axiosInstance.get(`/users/c/${username}`);
+      // console.log(data.data);
+      setUserProfile(data.data);
+    } catch (error) {
+      setUserProfile(null);
+    } finally {
+      setLoading(false);
+    }
+  };
 
+  useEffect(() => {
     if (username) {
       getUserProfile();
     }
   }, [username]);
-
-  const [activeTab, setActiveTab] = useState("Videos");
-  const [activeFilter, setActiveFilter] = useState("Previously uploaded");
 
   if (loading && !userProfile) {
     return (
@@ -155,42 +158,11 @@ export default function UserProfile({ videos }) {
       </div>
 
       {/* ── Video Grid ── */}
-      <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4 px-6 pb-8">
-        {videos.map((video) => (
-          <div key={video.id} className="group cursor-pointer">
-            {/* Thumbnail */}
-            <div className="relative w-full aspect-video rounded-lg overflow-hidden bg-gray-800">
-              <img
-                src={video.thumb}
-                alt={video.title}
-                className="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"
-              />
-              {/* Play overlay */}
-              <div className="absolute inset-0 bg-black/30 opacity-0 group-hover:opacity-100 transition-opacity flex items-center justify-center">
-                <div className="w-10 h-10 bg-white/90 rounded-full flex items-center justify-center">
-                  <svg
-                    className="w-5 h-5 text-black ml-0.5"
-                    fill="currentColor"
-                    viewBox="0 0 24 24"
-                  >
-                    <path d="M8 5v14l11-7z" />
-                  </svg>
-                </div>
-              </div>
-            </div>
+      {activeTab==="Videos" && (
+        <VideoGrid userId={userProfile._id} />
+      )}
 
-            {/* Info */}
-            <div className="mt-2">
-              <p className="text-sm font-medium leading-snug line-clamp-2 text-white group-hover:text-purple-300 transition-colors">
-                {video.title}
-              </p>
-              <p className="text-xs text-gray-500 mt-1">
-                {video.views}&nbsp;•&nbsp;{video.time}
-              </p>
-            </div>
-          </div>
-        ))}
-      </div>
+      
     </div>
   );
 }
