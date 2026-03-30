@@ -1,4 +1,7 @@
 import { useState, useRef } from "react";
+import { axiosInstance } from "../utilities/axios";
+import { useDispatch, useSelector } from "react-redux";
+import { updateUserDetails } from "../features/auth/authSlice";
 import {
   UserIcon,
   LockIcon,
@@ -9,16 +12,24 @@ import {
   EyeOffIcon,
 } from "./Icons";
 
+
 const EditProfile = () => {
   const [activeTab, setActiveTab] = useState("account");
   const [avatarPreview, setAvatarPreview] = useState(null);
   const [coverPreview, setCoverPreview] = useState(null);
   const [toast, setToast] = useState(null);
+  const[coverLoading, setCoverLoading] = useState(false);
+  const [avatarLoading, setAvatarLoading] = useState(false);
+  const dispatch = useDispatch();
+  const { user } = useSelector((state) => state.auth);
 
   const avatarRef = useRef();
   const coverRef = useRef();
 
-  const [accountForm, setAccountForm] = useState({ fullName: "", email: "" });
+  const [accountForm, setAccountForm] = useState({
+    fullName: user?.fullName || "",
+    email: user?.email || "",
+  });
   const [passwordForm, setPasswordForm] = useState({
     oldPassword: "",
     newPassword: "",
@@ -35,15 +46,27 @@ const EditProfile = () => {
     setTimeout(() => setToast(null), 3000);
   };
 
-  const handleAccountSubmit = (e) => {
+  const handleAccountSubmit = async (e) => {
     e.preventDefault();
     if (!accountForm.fullName || !accountForm.email)
       return showToast("All fields are required", "error");
-    // TODO: call updateAccountDetails API
-    showToast("Account details updated successfully!");
+
+    try {
+      const { data } = await axiosInstance.patch("/users/update-account", {
+        fullName: accountForm.fullName,
+        email: accountForm.email,
+      });
+
+      dispatch(updateUserDetails(data.data));
+      console.log(data.data);
+      showToast("Account details updated successfully!");
+    } catch (error) {
+      showToast("Failed to update account details", "error");
+    } finally {
+    }
   };
 
-  const handlePasswordSubmit = (e) => {
+  const handlePasswordSubmit = async (e) => {
     e.preventDefault();
     if (
       !passwordForm.oldPassword ||
@@ -51,13 +74,31 @@ const EditProfile = () => {
       !passwordForm.confirmPassword
     )
       return showToast("All fields are required", "error");
+
     if (passwordForm.newPassword !== passwordForm.confirmPassword)
       return showToast("New passwords do not match", "error");
+
     if (passwordForm.newPassword.length < 8)
       return showToast("Password must be at least 8 characters", "error");
+
     // TODO: call changeCurrentPassword API
-    showToast("Password changed successfully!");
-    setPasswordForm({ oldPassword: "", newPassword: "", confirmPassword: "" });
+    try {
+      await axiosInstance.patch("/users/change-password", {
+        oldPassword: passwordForm.oldPassword,
+        newPassword: passwordForm.newPassword,
+      });
+      showToast("Password changed successfully!");
+      setPasswordForm({
+        oldPassword: "",
+        newPassword: "",
+        confirmPassword: "",
+      });
+    } catch (error) {
+      showToast(
+        error.response?.data?.message || "Failed to change password",
+        "error",
+      );
+    }
   };
 
   const handleAvatarChange = (e) => {
@@ -66,11 +107,32 @@ const EditProfile = () => {
     setAvatarPreview(URL.createObjectURL(file));
   };
 
-  const handleAvatarSubmit = () => {
-    if (!avatarPreview)
+  const handleAvatarSubmit = async () => {
+    if (!avatarRef.current?.files[0])
       return showToast("Please select an avatar image", "error");
-    // TODO: call updateUserAvatar API with avatarRef.current.files[0]
-    showToast("Avatar updated successfully!");
+
+    const formData = new FormData();
+    formData.append("avatar", avatarRef.current.files[0]);
+
+    setAchatarLoading(true);
+    try {
+      const { data } = await axiosInstance.patch("/users/avatar", formData, {
+        headers: { "Content-Type": "multipart/form-data" },
+      });
+
+      dispatch(updateUserDetails({ avatar: data.data.avatar }));
+      showToast("Avatar updated successfully!");
+      setAvatarPreview(null);
+      avatarRef.current.value = "";
+    } catch (error) {
+      showToast(
+        error.response?.data?.message || "Failed to update avatar",
+        "error",
+      );
+    }
+    finally{
+      setAvatarLoading(false);
+    }
   };
 
   const handleCoverChange = (e) => {
@@ -79,10 +141,35 @@ const EditProfile = () => {
     setCoverPreview(URL.createObjectURL(file));
   };
 
-  const handleCoverSubmit = () => {
-    if (!coverPreview) return showToast("Please select a cover image", "error");
-    // TODO: call updateUsercoverImage API with coverRef.current.files[0]
-    showToast("Cover image updated successfully!");
+  const handleCoverSubmit = async () => {
+    if (!coverRef.current?.files[0])
+      return showToast("Please select a cover image", "error");
+
+    const formData = new FormData();
+    formData.append("coverImage", coverRef.current.files[0]);
+
+    setCoverLoading(true);
+    try {
+      const { data } = await axiosInstance.patch(
+        "/users/cover-image",
+        formData,
+        {
+          headers: { "Content-Type": "multipart/form-data" },
+        },
+      );
+
+      dispatch(updateUserDetails({ coverImage: data.data.coverImage }));
+      showToast("Cover image updated successfully!");
+      setCoverPreview(null);
+      coverRef.current.value = "";
+    } catch (error) {
+      showToast(
+        error.response?.data?.message || "Failed to update cover image",
+        "error",
+      );
+    } finally {
+      setCoverLoading(false);
+    }
   };
 
   const tabs = [
@@ -372,7 +459,7 @@ const EditProfile = () => {
                   <button
                     onClick={handleAvatarSubmit}
                     className="bg-violet-600 hover:bg-violet-500 text-white px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 hover:shadow-lg hover:shadow-violet-900/40 active:scale-95 disabled:opacity-40"
-                    disabled={!avatarPreview}
+                    disabled={!avatarPreview || avatarLoading}
                   >
                     Save Avatar
                   </button>
@@ -441,7 +528,7 @@ const EditProfile = () => {
                   <button
                     onClick={handleCoverSubmit}
                     className="bg-violet-600 hover:bg-violet-500 text-white px-6 py-2.5 rounded-xl text-sm font-semibold transition-all duration-200 hover:shadow-lg hover:shadow-violet-900/40 active:scale-95 disabled:opacity-40"
-                    disabled={!coverPreview}
+                    disabled={!coverPreview || coverLoading}
                   >
                     Save Cover Image
                   </button>

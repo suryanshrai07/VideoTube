@@ -4,10 +4,8 @@ import editSvg from "../assets/editButton.svg";
 import { useParams } from "react-router-dom";
 import { axiosInstance } from "../utilities/axios";
 import { Loader } from "lucide-react";
-import { fetchVideos } from "../features/videos/videoActions";
 import VideoGrid from "./VideoGrid";
-import { use } from "react";
-import { act } from "react";
+
 
 const tabs = ["Videos", "Playlist", "Tweets", "Following"];
 const filters = ["Previously uploaded", "Oldest", "Item"];
