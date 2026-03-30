@@ -102,7 +102,10 @@ export default function UserProfile() {
 
           {/* Edit button stays top-right */}
           {user?.username === userProfile.username && (
-            <button className="flex items-center gap-1.5 mb-1 px-4 py-1.5 text-sm font-medium rounded-md border border-white/20 bg-white/5 hover:bg-white/10 transition-colors">
+            <button
+              className="flex items-center gap-1.5 mb-1 px-4 py-1.5 text-sm font-medium rounded-md border border-white/20 bg-white/5 hover:bg-white/10 transition-colors"
+              onClick={() => (window.location.href = "/update-profile")}
+            >
               <img src={editSvg} />
               Edit
             </button>
@@ -158,11 +161,7 @@ export default function UserProfile() {
       </div>
 
       {/* ── Video Grid ── */}
-      {activeTab==="Videos" && (
-        <VideoGrid userId={userProfile._id} />
-      )}
-
-      
+      {activeTab === "Videos" && <VideoGrid userId={userProfile._id} />}
     </div>
   );
 }
