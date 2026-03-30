@@ -5,7 +5,7 @@ const initialState = {
     user : null,
     token : token,
     isAuthenticated : false,
-    loading : false,
+    loading : true,
     error : null,
 };
 

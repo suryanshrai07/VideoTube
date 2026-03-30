@@ -10,6 +10,7 @@ import { checkAuthUser } from "./features/auth/authActions";
 import UserProfile from "./components/UserProfile";
 import { Toaster } from "react-hot-toast";
 import VideoPlayer from "./components/VideoPlayer";
+import EditProfile from "./components/EditProfile";
 
 function App() {
   const dispatch = useDispatch();
@@ -20,7 +21,7 @@ function App() {
 
   const { loading, isAuthenticated } = useSelector((state) => state.auth);
 
-  if (loading && !isAuthenticated) {
+  if (loading) {
     return (
       <div className="w-screen h-screen flex justify-center items-center">
         <Loader className="size-10 animate-spin" />
@@ -46,16 +47,19 @@ function App() {
         />
 
         <Route path="/user/:username" element={<Home />}>
-          <Route
-            index
-            element={<UserProfile/>}
-          />
+          <Route index element={<UserProfile />} />
         </Route>
 
         <Route path="/video/:videoId" element={<Home />}>
           <Route index element={<VideoPlayer />} />
         </Route>
 
+        <Route
+          path="/update-profile"
+          element={
+            !isAuthenticated ? <Navigate to="/sign-in" /> : <EditProfile />
+          }
+        />
       </Routes>
 
       <Toaster />
