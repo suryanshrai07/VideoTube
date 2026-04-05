@@ -9,5 +9,5 @@ export const mainNavItems = [
 
 export const bottomNavItems = [
   { id: 7, label: "Support", icon: "help-circle", path: "/support" },
-  { id: 8, label: "Settings", icon: "settings", path: "/settings" },
+  { id: 8, label: "Settings", icon: "settings", path: "/user/dashboard" },
 ];

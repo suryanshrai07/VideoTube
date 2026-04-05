@@ -11,6 +11,7 @@ import UserProfile from "./components/UserProfile";
 import { Toaster } from "react-hot-toast";
 import VideoPlayer from "./components/VideoPlayer";
 import EditProfile from "./components/EditProfile";
+import Dashboard from "./components/Dashboard";
 
 function App() {
   const dispatch = useDispatch();
@@ -58,6 +59,13 @@ function App() {
           path="/update-profile"
           element={
             !isAuthenticated ? <Navigate to="/sign-in" /> : <EditProfile />
+          }
+        />
+
+        <Route
+          path="/user/dashboard"
+          element={
+            !isAuthenticated ? <Navigate to="/sign-in" /> : <Dashboard />
           }
         />
       </Routes>

@@ -28,7 +28,7 @@ export default function Sidebar() {
             label={item.label}
             icon={item.icon}
             active={activeItem === item.id}
-            onClick={() => setActiveItem(item.id)}
+            onClick={()=>window.location.href = item.path}
           />
         ))}
       </nav>
