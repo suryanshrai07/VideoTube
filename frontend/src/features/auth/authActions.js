@@ -10,6 +10,7 @@ import {
   checkAuthStart,
   checkAuthSuccess,
   checkAuthFailed,
+  logout
 } from "./authSlice";
 
 const checkAuthUser = () => async (dispatch) => {
@@ -55,6 +56,22 @@ const signupUser = (userData) => async (dispatch) => {
   }
 };
 
+const logoutUser = () => async (dispatch) => {
+  const token = localStorage.getItem("token") || "";
+  try {
+    await axiosInstance.post(
+      "/users/logout",
+      {},
+      {
+        headers: { Authorization: `Bearer ${token}` },
+        withCredentials: true,
+      }
+    );
+  } catch (err) {
+    console.log("Logout error:", err);
+  } finally {
+    dispatch(logout());
+  }
+};
 
-
-export { loginUser, signupUser , checkAuthUser};
+export { loginUser, signupUser , checkAuthUser, logoutUser};

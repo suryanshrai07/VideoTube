@@ -12,6 +12,8 @@ import useInfiniteScroll from "../hooks/useInfiniteScroll";
 import { incrementPage, resetVideos } from "../features/videos/videoSlice";
 import { fetchVideos } from "../features/videos/videoActions";
 import UploadVideo from "./UploadVideo";
+import { logoutUser } from "../features/auth/authActions";
+import { useNavigate } from "react-router-dom";
 
 function Toggle({ checked, onChange }) {
   return (
@@ -62,6 +64,7 @@ export default function Dashboard() {
 
   const [rows, setRows] = useState([]);
   const [showUpload, setShowUpload] = useState(false);
+  const navigate = useNavigate();
 
   useEffect(() => {
     setRows(videos);
@@ -118,13 +121,24 @@ export default function Dashboard() {
             </p>
           </div>
 
-          <button
-            className="flex items-center gap-2 rounded-xl bg-violet-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-600/30 transition-all duration-200 hover:-translate-y-0.5 hover:bg-violet-500 hover:shadow-violet-500/40 active:scale-95"
-            onClick={() => setShowUpload(true)}
-          >
-            <PlusIcon size={16} />
-            Upload Video
-          </button>
+          <div className="flex gap-5">
+            <button
+              className="flex items-center gap-2 rounded-xl bg-violet-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-violet-600/30 transition-all duration-200 hover:-translate-y-0.5 hover:bg-violet-500 hover:shadow-violet-500/40 active:scale-95"
+              onClick={() => setShowUpload(true)}
+            >
+              <PlusIcon size={16} />
+              Upload Video
+            </button>
+            <button
+              className="flex items-center gap-2 rounded-xl bg-red-600 px-5 py-3 text-sm font-semibold text-white shadow-lg shadow-red-700/30 transition-all duration-200 hover:-translate-y-0.5 hover:bg-red-500 hover:shadow-red-500/40 active:scale-95"
+              onClick={() => {
+                dispatch(logoutUser());
+                navigate("/");
+              }}
+            >
+              Log Out
+            </button>
+          </div>
         </div>
         {showUpload && <UploadVideo onClose={() => setShowUpload(false)} />}
 
@@ -178,7 +192,7 @@ export default function Dashboard() {
                 {rows.map((video, i) => (
                   <tr
                     key={video._id}
-                    className="group border-b border-white/5 transition-colors duration-150 last:border-0 hover:bg-white/[0.025]"
+                    className="group border-b border-white/5 transition-colors duration-150 last:border-0 hover:bg-white/2.5"
                     style={{ animationDelay: `${200 + i * 60}ms` }}
                   >
                     <td className="py-4 pl-5 pr-3">
