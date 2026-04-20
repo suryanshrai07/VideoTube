@@ -14,6 +14,8 @@ import { fetchVideos } from "../features/videos/videoActions";
 import UploadVideo from "./UploadVideo";
 import { logoutUser } from "../features/auth/authActions";
 import { useNavigate } from "react-router-dom";
+import { axiosInstance } from "../utilities/axios";
+import toast from "react-hot-toast";
 
 function Toggle({ checked, onChange }) {
   return (
@@ -73,13 +75,13 @@ export default function Dashboard() {
   // Initial load
   useEffect(() => {
     dispatch(resetVideos());
-    dispatch(fetchVideos(1, "", user._id));
+    dispatch(fetchVideos(1, "", user._id, true));
   }, [user._id]);
 
   // Load next pages
   useEffect(() => {
     if (page === 1) return;
-    dispatch(fetchVideos(page, "", user._id));
+    dispatch(fetchVideos(page, "", user._id, true));
   }, [page]);
 
   const loadMore = useCallback(() => {
@@ -88,12 +90,25 @@ export default function Dashboard() {
 
   const sentinelRef = useInfiniteScroll(loadMore, hasMore);
 
-  const toggleActive = (id) => {
+  const toggleActive = async (id) => {
     setRows((prev) =>
       prev.map((v) =>
         v._id === id ? { ...v, isPublished: !v.isPublished } : v,
       ),
     );
+
+    try {
+      await axiosInstance.patch(`/videos/toggle/publish/${id}`);
+      toast.success("Video toggle succesfully");
+    } catch (err) {
+      setRows((prev) =>
+        prev.map((v) =>
+          v._id === id ? { ...v, isPublished: !v.isPublished } : v,
+        ),
+      );
+      console.error("Failed to toggle publish status:", err);
+      toast.error("Failed to toggle publish status");
+    }
   };
 
   const deleteRow = (id) => setRows((prev) => prev.filter((v) => v._id !== id));
