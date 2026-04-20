@@ -13,6 +13,7 @@ const getAllVideos = asyncHandler(async (req, res) => {
     sortBy = "createdAt",
     sortType = "desc",
     userId,
+    acceptUnpublishedVideo = false
   } = req.query;
   //TODO: get all videos based on query, sort, pagination
 
@@ -31,7 +32,8 @@ const getAllVideos = asyncHandler(async (req, res) => {
   }
 
   // Only return published videos publicly
-  match.isPublished = true;
+  if(!acceptUnpublishedVideo)
+    match.isPublished = true;
 
   // Sorting stage
   const sortStage = {};
